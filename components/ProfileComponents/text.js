@@ -7,7 +7,7 @@ export default function TextComp(props) {
     id: props.data.id,
     values: '',
   });
-
+  //Deneme
   const getValue = (val) => {
     setText(val);
     setAnswer({
