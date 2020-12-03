@@ -1,12 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 
 import RadioForm, {
   RadioButton,
@@ -15,24 +8,15 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 
 export default function RadioButtonComp(props) {
-  const [choice, setChoice] = useState();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   var radio_props = props.data.Answers.map((item) => ({
     label: item.key,
     value: item.value,
   }));
-  const [answer, setAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
-  const onSelect = (val, i) => {
-    setChoice(val);
+
+  const getValue = (val, i) => {
     setSelectedIndex(i);
-    setAnswer({
-      id: props.data.id,
-      values: choice,
-    });
-    props.parentCallback(answer);
+    props.changeHandler(val, props.data.id);
   };
 
   return (
@@ -46,7 +30,7 @@ export default function RadioButtonComp(props) {
                 obj={obj}
                 index={i}
                 isSelected={selectedIndex === i}
-                onPress={(val, i) => onSelect(val, i)}
+                onPress={(val, i) => getValue(val, i)}
                 borderWidth={1}
                 buttonInnerColor={'white'}
                 buttonOuterColor={selectedIndex === i ? 'white' : 'white'}
@@ -59,7 +43,7 @@ export default function RadioButtonComp(props) {
                 obj={obj}
                 index={i}
                 labelHorizontal={true}
-                onPress={onSelect}
+                onPress={getValue}
                 labelStyle={{fontSize: 15, color: 'white'}}
                 labelWrapStyle={{}}
               />

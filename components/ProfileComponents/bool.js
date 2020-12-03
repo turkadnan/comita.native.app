@@ -1,12 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 
 import RadioForm, {
   RadioButton,
@@ -15,25 +8,16 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 
 export default function BoolComp(props) {
-  const [choice, setChoice] = useState();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   var radio_props = [
     {label: 'Evet', value: 'evet'},
     {label: 'Hayır', value: 'hayır'},
   ];
-  const [answer, setAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
 
   const onSelect = (val, i) => {
-    setChoice(val);
     setSelectedIndex(i);
-    setAnswer({
-      id: props.data.id,
-      values: choice,
-    });
-    props.parentCallback(answer);
+
+    props.changeHandler(val, props.data.id);
   };
 
   return (

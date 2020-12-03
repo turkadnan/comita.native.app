@@ -1,97 +1,75 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {profileScreenStyle} from '../Style/Styles';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {colors} from '../constants/backgroundConstant';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import DynamicForm from '../components/ProfileComponents/dynamicForm';
 import {signOut, fillProfile} from '../store/actions/ActionCreator';
-
 export default function ProfileScreen({navigation}) {
+  const [textValue, SetTextValue] = useState([]);
+
   const dispatch = useDispatch();
 
   const onSavePress = () => {
-    dispatch(fillProfile());
+    console.log(textValue);
+    dispatch(fillProfile(textValue));
+    console.log(textValue);
   };
 
   const onExitPress = () => {
     dispatch(signOut());
   };
+
+  const controlChangeHandler = (text, id) => {
+    SetTextValue((prev) => {
+      const index = prev.findIndex((index) => index.id == id);
+      if (typeof prev[index] === 'undefined') {
+        return [
+          ...prev,
+          {
+            id: id,
+            value: text,
+          },
+        ];
+      } else {
+        prev[index] = {
+          id: id,
+          value: text,
+        };
+        return [...prev];
+      }
+    });
+  };
+
   return (
     <LinearGradient
       start={{x: 0.0, y: 0.0}}
       end={{x: 1, y: 1.0}}
       colors={colors}
-      style={styles.screen}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Profil</Text>
+      style={profileScreenStyle.screen}>
+      <View style={profileScreenStyle.headerContainer}>
+        <Text style={profileScreenStyle.header}>Profil</Text>
       </View>
-      <View style={styles.info}>
-        <Text style={styles.infoText}>Lütfen eksik yerleri doldurun</Text>
+      <View style={profileScreenStyle.info}>
+        <Text style={profileScreenStyle.infoText}>
+          Lütfen eksik yerleri doldurun
+        </Text>
       </View>
 
-      <DynamicForm />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => onExitPress()}>
-          <Text style={styles.buttonTitle}>Çıkış</Text>
+      <DynamicForm changeHandler={controlChangeHandler} data={textValue} />
+      <View style={profileScreenStyle.buttonContainer}>
+        <TouchableOpacity
+          style={profileScreenStyle.button}
+          onPress={() => onExitPress()}>
+          <Text style={profileScreenStyle.buttonTitle}>Çıkış</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => onSavePress()}>
-          <Text style={styles.buttonTitle}>Kaydet</Text>
+        <TouchableOpacity
+          style={profileScreenStyle.button}
+          onPress={() => onSavePress()}>
+          <Text style={profileScreenStyle.buttonTitle}>Kaydet</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#2f738d',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-    marginTop: 10,
-  },
-  header: {
-    fontSize: 20,
-    color: 'white',
-    margin: 10,
-    fontWeight: 'bold',
-  },
-  info: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  infoText: {
-    fontSize: 20,
-    color: 'white',
-    marginBottom: 15,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-
-    justifyContent: 'center',
-  },
-  buttonTitle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-
-  button: {
-    backgroundColor: 'transparent',
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
-    marginBottom: 10,
-    height: 48,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'white',
-    width: '40%',
-  },
-});

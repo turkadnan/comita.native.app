@@ -83,8 +83,24 @@ export const verifyProfile = () => (dispatch) => {
   });
 };
 
-export const fillProfile = () => (dispatch) => {
+export const fillProfile = (data) => (dispatch) => {
   return new Promise(() => {
-    dispatch(fetchFillProfile());
+    readDataFromStorage().then((res) => {
+      const guid = res;
+      const form = {
+        usergui: guid,
+        form_values: data,
+      };
+
+      Api.post('/mobile-profile', form)
+        .then((res) => {
+          if (res.data.StatusCode == 201) {
+            dispatch(fetchFillProfile(form));
+          } else {
+            alert('Başarısız');
+          }
+        })
+        .catch((e) => alert('Başarısız'));
+    });
   });
 };

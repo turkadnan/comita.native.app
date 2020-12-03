@@ -1,13 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useRef} from 'react';
+import {registerScreenStyle} from '../Style/Styles';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
   TextInput,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import {colors} from '../constants/backgroundConstant';
@@ -20,6 +17,15 @@ export default function RegisterScreen({navigation}) {
   const input2 = useRef(null);
   const input3 = useRef(null);
   const input4 = useRef(null);
+
+  const [focusedNameStyle, setFocusedNameStyle] = useState(false);
+  const [focusedSurnameStyle, setFocusedSurnameStyle] = useState(false);
+  const [focusedEmailStyle, setFocusedEmailStyle] = useState(false);
+  const [focusedPasswordStyle, setFocusedPasswordStyle] = useState(false);
+  const [
+    focusedConfirmedPasswordStyle,
+    setFocusedConfirmPasswordStyle,
+  ] = useState(false);
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -57,14 +63,20 @@ export default function RegisterScreen({navigation}) {
       start={{x: 0.0, y: 0.0}}
       end={{x: 1, y: 1.0}}
       colors={colors}
-      style={styles.screen}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Yeni hesap oluştur</Text>
+      style={registerScreenStyle.screen}>
+      <View style={registerScreenStyle.headerContainer}>
+        <Text style={registerScreenStyle.header}>Yeni hesap oluştur</Text>
       </View>
 
-      <View style={styles.inputContainer}>
+      <View style={registerScreenStyle.inputContainer}>
         <TextInput
-          style={styles.input}
+          onFocus={() => setFocusedNameStyle(true)}
+          onBlur={() => setFocusedNameStyle(false)}
+          style={
+            focusedNameStyle
+              ? registerScreenStyle.inputFocused
+              : registerScreenStyle.input
+          }
           autoFocus={true}
           onSubmitEditing={() => input1.current.focus()}
           onChangeText={(text) => setName(text)}
@@ -76,7 +88,13 @@ export default function RegisterScreen({navigation}) {
         />
 
         <TextInput
-          style={styles.input}
+          onFocus={() => setFocusedSurnameStyle(true)}
+          onBlur={() => setFocusedSurnameStyle(false)}
+          style={
+            focusedSurnameStyle
+              ? registerScreenStyle.inputFocused
+              : registerScreenStyle.input
+          }
           onSubmitEditing={() => input2.current.focus()}
           onChangeText={(text) => setSurname(text)}
           ref={input1}
@@ -88,7 +106,13 @@ export default function RegisterScreen({navigation}) {
         />
 
         <TextInput
-          style={styles.input}
+          onFocus={() => setFocusedEmailStyle(true)}
+          onBlur={() => setFocusedEmailStyle(false)}
+          style={
+            focusedEmailStyle
+              ? registerScreenStyle.inputFocused
+              : registerScreenStyle.input
+          }
           onSubmitEditing={() => input3.current.focus()}
           ref={input2}
           autoCapitalize="none"
@@ -100,7 +124,13 @@ export default function RegisterScreen({navigation}) {
         />
 
         <TextInput
-          style={styles.input}
+          onFocus={() => setFocusedPasswordStyle(true)}
+          onBlur={() => setFocusedPasswordStyle(false)}
+          style={
+            focusedPasswordStyle
+              ? registerScreenStyle.inputFocused
+              : registerScreenStyle.input
+          }
           onSubmitEditing={() => input4.current.focus()}
           ref={input3}
           autoCapitalize="none"
@@ -113,7 +143,13 @@ export default function RegisterScreen({navigation}) {
         />
 
         <TextInput
-          style={styles.input}
+          onFocus={() => setFocusedConfirmPasswordStyle(true)}
+          onBlur={() => setFocusedConfirmPasswordStyle(false)}
+          style={
+            focusedConfirmedPasswordStyle
+              ? registerScreenStyle.inputFocused
+              : registerScreenStyle.input
+          }
           ref={input4}
           autoCapitalize="none"
           onSubmitEditing={() => onRegisterPress()}
@@ -126,18 +162,20 @@ export default function RegisterScreen({navigation}) {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => onRegisterPress()}>
-        <Text style={styles.buttonTitle}>Kayıt ol</Text>
+      <TouchableOpacity
+        style={registerScreenStyle.button}
+        onPress={() => onRegisterPress()}>
+        <Text style={registerScreenStyle.buttonTitle}>Kayıt ol</Text>
       </TouchableOpacity>
 
-      <View style={styles.footerView}>
-        <Text style={styles.footerText}>
+      <View style={registerScreenStyle.footerView}>
+        <Text style={registerScreenStyle.footerText}>
           Hesabınız var mı?
           <Text
             onPress={() => {
               navigation.navigate('Login');
             }}
-            style={styles.footerLink}>
+            style={registerScreenStyle.footerLink}>
             {' '}
             Giriş yapın
           </Text>
@@ -146,72 +184,3 @@ export default function RegisterScreen({navigation}) {
     </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#2f738d',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-    marginTop: 20,
-  },
-  header: {
-    fontSize: 20,
-    color: 'white',
-    margin: 20,
-    paddingLeft: 10,
-    fontWeight: 'bold',
-  },
-  inputContainer: {
-    alignItems: 'center',
-    margin: 20,
-  },
-  input: {
-    borderColor: '#e7e7de',
-    borderWidth: 1,
-    margin: 5,
-    color: 'white',
-    fontSize: 15,
-    borderRadius: 20,
-    padding: 10,
-    width: '80%',
-  },
-
-  buttonTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  button: {
-    backgroundColor: 'transparent',
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    height: 48,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'white',
-  },
-
-  footerView: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  footerText: {
-    fontSize: 16,
-    color: '#2e2e2d',
-  },
-  footerLink: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});

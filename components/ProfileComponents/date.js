@@ -13,29 +13,26 @@ import LinearGradient from 'react-native-linear-gradient';
 import {buttonBackgroundColor} from '../../constants/backgroundConstant';
 
 export default function DatePickerComp(props) {
-  const [date, setDate] = useState(new Date());
   const [isModalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date(null));
 
-  const [answer, setAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
+  const dayIn = date.getUTCDate();
+  const monthIn = date.getUTCMonth() + 1;
+  const yearIn = date.getUTCFullYear();
+  const newDateIn = dayIn + '/' + monthIn + '/' + yearIn;
 
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
+  const getValue = (val) => {
+    const day = val.getUTCDate();
+    const month = val.getUTCMonth() + 1;
+    const year = val.getUTCFullYear();
+    const newDate = day + '/' + month + '/' + year;
 
-  const newDate = day + '/' + month + '/' + year;
-  const onChangeDate = (val) => {
+    props.changeHandler(newDate, props.data.id);
     setDate(val);
   };
+
   const onPress = () => {
     setModalVisible(!isModalVisible);
-    setAnswer({
-      id: props.data.id,
-      values: newDate,
-    });
-    props.parentCallback(answer);
   };
 
   return (
@@ -46,7 +43,7 @@ export default function DatePickerComp(props) {
         <TouchableOpacity
           style={styles.input}
           onPress={() => setModalVisible(!isModalVisible)}>
-          <Text style={styles.inputText}>{newDate}</Text>
+          <Text style={styles.inputText}>{props.deger || newDateIn}</Text>
         </TouchableOpacity>
       </View>
       <View>
@@ -65,7 +62,7 @@ export default function DatePickerComp(props) {
             <View style={styles.datePickerContainer}>
               <DatePicker
                 date={date}
-                onDateChange={onChangeDate}
+                onDateChange={getValue}
                 minimumDate={new Date(1920, 1, 1)}
                 maximumDate={new Date(2020, 1, 1)}
                 mode="date"
