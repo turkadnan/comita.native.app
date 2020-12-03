@@ -5,7 +5,7 @@ const initialState = {
   data: '',
   profileList: [],
   isProfileFilled: false,
-  answers: [],
+  profileDetail: null,
 };
 
 const appReducer = (state = initialState, action) => {
@@ -27,6 +27,7 @@ const appReducer = (state = initialState, action) => {
         ...state,
         data: '',
         userIn: false,
+        profileDetail: '',
       };
     case ACTION_TYPES.VERIFY_AUTH:
       return {
@@ -43,6 +44,7 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         isProfileFilled: true,
+        profileDetail: action.payload,
       };
 
     default:

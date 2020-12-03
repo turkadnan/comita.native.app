@@ -3,18 +3,11 @@ import {StyleSheet, View, Text} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 export default function Select(props) {
-  const [pickerAnswer, setPickerAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
+  const [pickerAnswer, setPickerAnswer] = useState();
 
   const getValue = (val) => {
-    setPickerAnswer({
-      id: props.data.id,
-      values: val,
-    });
-
-    props.parentCallback(pickerAnswer);
+    setPickerAnswer(val);
+    props.changeHandler(val, props.data.id);
   };
 
   return (
@@ -23,10 +16,11 @@ export default function Select(props) {
 
       <Picker
         onValueChange={getValue}
-        selectedValue={pickerAnswer.values}
+        selectedValue={pickerAnswer}
         dropdownIconColor="white"
         style={styles.input}
         mode="dropdown">
+        <Picker.Item key="Seçiniz" label="Seçiniz" value="Seçiniz" />
         {props.data.Answers.map((item) => (
           <Picker.Item key={item.key} label={item.key} value={item.value} />
         ))}

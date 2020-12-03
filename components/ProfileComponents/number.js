@@ -3,19 +3,11 @@ import {StyleSheet, View, Text} from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 
 export default function NumberComp(props) {
-  const [number, setNumber] = useState();
-  const [answer, setAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
+  const [number, setNumber] = useState(null);
 
   const getValue = (val) => {
     setNumber(val);
-    setAnswer({
-      id: props.data.id,
-      values: number,
-    });
-    props.parentCallback(answer);
+    props.changeHandler(val, props.data.id);
   };
 
   return (
@@ -23,7 +15,7 @@ export default function NumberComp(props) {
       <Text style={styles.text}>{props.data.control_text} :</Text>
       <View style={styles.input}>
         <NumericInput
-          value={number}
+          value={props.deger || number}
           minValue={0}
           maxValue={100}
           onChange={getValue}

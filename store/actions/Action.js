@@ -24,6 +24,7 @@ export const fetchProfile = (data) => ({
   payload: data,
 });
 
-export const fetchFillProfile = () => ({
+export const fetchFillProfile = (data) => ({
   type: ACTION_TYPES.FILL_PROFILE,
+  payload: data,
 });

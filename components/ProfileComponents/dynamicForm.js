@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Select from './select';
 import DatePickerComp from './date';
@@ -11,19 +11,11 @@ import CheckBox from './checkBox';
 import {useSelector} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
 
-export default function DynamicComp() {
+export default function DynamicComp(props) {
   const list = useSelector((state) => state.appReducer.profileList);
 
-  const postList = [];
-
-  const handleCallback = (data) => {
-    const index = postList.findIndex((index) => index.id == data.id);
-    if (typeof postList[index] === 'undefined') {
-      postList.push(data);
-    } else {
-      postList[index] = data;
-    }
-    console.log(postList);
+  const changeHandler = (text, id) => {
+    props.changeHandler(text, id);
   };
 
   return (
@@ -32,16 +24,12 @@ export default function DynamicComp() {
         {list.map((item) => {
           if (item.control_type == 'select') {
             return (
-              <Select
-                parentCallback={handleCallback}
-                key={item.id}
-                data={item}
-              />
+              <Select key={item.id} data={item} changeHandler={changeHandler} />
             );
           } else if (item.control_type == 'date') {
             return (
               <DatePickerComp
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />
@@ -49,15 +37,15 @@ export default function DynamicComp() {
           } else if (item.control_type == 'text') {
             return (
               <TextComp
-                parentCallback={handleCallback}
                 key={item.id}
                 data={item}
+                changeHandler={changeHandler}
               />
             );
           } else if (item.control_type == 'number') {
             return (
               <NumberComp
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />
@@ -65,7 +53,7 @@ export default function DynamicComp() {
           } else if (item.control_type == 'radio') {
             return (
               <RadioButtonComp
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />
@@ -73,7 +61,7 @@ export default function DynamicComp() {
           } else if (item.control_type == 'textarea') {
             return (
               <TextAreaComp
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />
@@ -81,7 +69,7 @@ export default function DynamicComp() {
           } else if (item.control_type == 'bool') {
             return (
               <BoolComp
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />
@@ -89,7 +77,7 @@ export default function DynamicComp() {
           } else if (item.control_type == 'check') {
             return (
               <CheckBox
-                parentCallback={handleCallback}
+                changeHandler={changeHandler}
                 key={item.id}
                 data={item}
               />

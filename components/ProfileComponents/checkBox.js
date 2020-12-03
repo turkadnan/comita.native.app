@@ -4,19 +4,11 @@ import {StyleSheet, View, Text} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 export default function CheckBoxComp(props) {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [answer, setAnswer] = useState({
-    id: props.data.id,
-    values: '',
-  });
 
   const onCheck = (val) => {
     setToggleCheckBox(val);
 
-    setAnswer({
-      id: props.data.id,
-      values: choice,
-    });
-    props.parentCallback(answer);
+    props.changeHandler(val, props.data.id);
   };
   return (
     <View style={styles.container}>

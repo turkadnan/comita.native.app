@@ -1,78 +1,103 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import {colors} from '../constants/backgroundConstant';
+import {editProfileScreenStyle} from '../Style/Styles';
 import LinearGradient from 'react-native-linear-gradient';
-import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DynamicForm from '../components/ProfileComponents/dynamicForm';
+import {useSelector} from 'react-redux';
+
 export default function EditProfileScreen({navigation}) {
-  const list = useSelector((state) => state.appReducer.profileList);
   const onMenuPress = () => {
     navigation.openDrawer();
+  };
+
+  //const profileDetail = useSelector(state => state.appReducer.profileDetail);
+  const [textValue, SetTextValue] = useState([]);
+  const onSavePress = () => {
+    console.log(textValue);
+    //dispatch(fillProfile(textValue));
+  };
+  const controlChangeHandler = (text, id) => {
+    SetTextValue((prev) => {
+      const index = prev.findIndex((index) => index.id == id);
+      if (typeof prev[index] === 'undefined') {
+        return [
+          ...prev,
+          {
+            id: id,
+            value: text,
+          },
+        ];
+      } else {
+        prev[index] = {
+          id: id,
+          value: text,
+        };
+        return [...prev];
+      }
+    });
   };
   return (
     <LinearGradient
       start={{x: 0.0, y: 0.0}}
       end={{x: 1, y: 1.0}}
       colors={colors}
-      style={styles.screen}>
-      <TouchableOpacity style={styles.button} onPress={() => onMenuPress()}>
+      style={editProfileScreenStyle.screen}>
+      <TouchableOpacity
+        style={editProfileScreenStyle.button}
+        onPress={() => onMenuPress()}>
         <Icon name="bars" size={25} color="white" />
       </TouchableOpacity>
 
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Profil</Text>
+      <View style={editProfileScreenStyle.headerContainer}>
+        <Text style={editProfileScreenStyle.header}>Profil</Text>
       </View>
-      <View style={styles.info}>
-        <Text style={styles.infoText}>
+      <View style={editProfileScreenStyle.info}>
+        <Text style={editProfileScreenStyle.infoText}>
           Bilgilerinizi aşağıdan güncelleyebilirsiniz
         </Text>
       </View>
 
-      <DynamicForm />
+      <DynamicForm changeHandler={controlChangeHandler} />
+
+      <View style={editProfileScreenStyle.saveButtonContainer}>
+        <TouchableOpacity
+          style={editProfileScreenStyle.saveButton}
+          onPress={() => onSavePress()}>
+          <Text style={editProfileScreenStyle.saveButtonTitle}>Kaydet</Text>
+        </TouchableOpacity>
+      </View>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#2f738d',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  header: {
-    fontSize: 25,
-    color: 'white',
+  container: {
     margin: 5,
-    fontWeight: 'bold',
-  },
-  info: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 2,
-    borderColor: 'white',
-    borderRadius: 20,
+    width: '70%',
   },
-  infoText: {
-    fontSize: 16,
+  text: {
+    fontSize: 18,
     color: 'white',
-    marginBottom: 15,
+    width: '50%',
   },
-
-  button: {
-    backgroundColor: 'transparent',
-    marginBottom: 5,
-    height: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+  input: {
+    margin: 3,
+    color: 'white',
+    width: '70%',
     borderWidth: 1,
+    borderRadius: 20,
     borderColor: 'white',
-    width: '15%',
+    paddingLeft: 10,
   },
 });
